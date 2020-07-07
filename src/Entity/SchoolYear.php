@@ -77,7 +77,7 @@ class SchoolYear
     {
         return $this->dateEnd;
     }
-
+    
     public function setDateEnd(\DateTimeInterface $dateEnd): self
     {
         $this->dateEnd = $dateEnd;
@@ -114,5 +114,9 @@ class SchoolYear
         }
 
         return $this;
+    }
+
+    public function __toString() {
+        return $this->name;
     }
 }
