@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\StudentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +33,27 @@ class Student
      * @ORM\Column(type="string", length=200)
      */
     private $email;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=SchoolYear::class, inversedBy="students")
+     */
+    private $schoolYear;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="students")
+     */
+    private $tags;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Project::class, inversedBy="students")
+     */
+    private $projects;
+
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+        $this->projects = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,6 +92,70 @@ class Student
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getSchoolYear(): ?SchoolYear
+    {
+        return $this->schoolYear;
+    }
+
+    public function setSchoolYear(?SchoolYear $schoolYear): self
+    {
+        $this->schoolYear = $schoolYear;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Project[]
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        if ($this->projects->contains($project)) {
+            $this->projects->removeElement($project);
+        }
 
         return $this;
     }
